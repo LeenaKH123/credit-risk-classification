@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import os
 
 # Load data
-df = pd.read_csv("data/credit_data.csv")
+df = pd.read_csv("credit_data.csv")
 
 # Basic info
 print(df.info())
