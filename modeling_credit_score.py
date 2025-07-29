@@ -5,7 +5,9 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report, confusion_matrix
 
 # Load data
-df = pd.read_csv("credit_data.csv")
+df = pd.read_csv("Score.csv")
+print(df.columns.tolist())
+
 
 # Prepare features and target
 X = df.drop(columns='default')
@@ -23,3 +25,5 @@ y_pred = model.predict(X_test)
 
 print(confusion_matrix(y_test, y_pred))
 print(classification_report(y_test, y_pred))
+
+
