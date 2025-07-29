@@ -51,18 +51,27 @@ y_pred_labels = le.inverse_transform(y_pred)
 
 # Print evaluation metrics
 print("Confusion Matrix:")
-print(confusion_matrix(y_test_labels, y_pred_labels))
+cm = confusion_matrix(y_test_labels, y_pred_labels)
+print(cm)
 
 print("\nClassification Report:")
-print(classification_report(y_test_labels, y_pred_labels))
+report = classification_report(y_test_labels, y_pred_labels)
+print(report)
 
 # -----------------------------
-# Step 5: Feature Importance Plot
+# Step 5: Save Results to File
 # -----------------------------
-# Create folder for plots
 os.makedirs("plots", exist_ok=True)
 
-# Extract and sort feature importances
+with open("plots/classification_report.txt", "w") as f:
+    f.write("Confusion Matrix:\n")
+    f.write(str(cm) + "\n\n")
+    f.write("Classification Report:\n")
+    f.write(report)
+
+# -----------------------------
+# Step 6: Feature Importance Plot
+# -----------------------------
 importances = model.feature_importances_
 features = X.columns
 feature_df = pd.DataFrame({
@@ -70,10 +79,22 @@ feature_df = pd.DataFrame({
     'Importance': importances
 }).sort_values(by='Importance', ascending=False)
 
-# Plot feature importances
 plt.figure(figsize=(10, 6))
-sns.barplot(x='Importance', y='Feature', data=feature_df, palette='viridis')
+sns.barplot(x='Importance', y='Feature', data=feature_df)
 plt.title("Feature Importances - Random Forest")
 plt.tight_layout()
 plt.savefig("plots/feature_importance.png")
+plt.show()
+
+# -----------------------------
+# Step 7: Confusion Matrix Heatmap
+# -----------------------------
+plt.figure(figsize=(6, 4))
+sns.heatmap(cm, annot=True, fmt='d', cmap='Blues',
+            xticklabels=le.classes_, yticklabels=le.classes_)
+plt.xlabel("Predicted")
+plt.ylabel("Actual")
+plt.title("Confusion Matrix Heatmap")
+plt.tight_layout()
+plt.savefig("plots/confusion_matrix_heatmap.png")
 plt.show()
